@@ -1,0 +1,126 @@
+//TIMELAG_live & delay*3
+//controlable!!!
+import processing.video.*;
+
+final int delaytime  = 2;
+final int delaytime2 = 4;
+final int delaytime3 = 7;
+
+Capture cam;
+
+PImage[] buffer;
+PImage[] buffer2;
+PImage[] buffer3;
+
+int nFrames = (60/4)*delaytime;
+int nFrames2 = (60/4)*delaytime2;
+int nFrames3 = (60/4)*delaytime3;
+
+int iWrite  = 0, iRead = 1;
+int iWrite2 = 0, iRead2 = 1;
+int iWrite3 = 0, iRead3 = 1;
+
+void setup(){
+  size(1280, 720);
+  
+  String[] cameras = Capture.list();
+  
+  if (cameras.length == 0) {
+    //println("There are no cameras available for capture.");
+    exit();
+  } 
+  else {
+    //println("Available cameras:");
+    for (int i = 0; i < cameras.length; i++) {
+      //println(cameras[i]);
+    }
+    
+  //cam = new Capture(this, cameras[0]);
+  cam = new Capture(this, 1280, 720,"BUFFALO BSW32K02H Webcam");
+  
+  cam.start();
+  buffer = new PImage[nFrames];
+  buffer2 = new PImage[nFrames2];
+  buffer3 = new PImage[nFrames3];
+  }
+}
+
+
+void draw() {
+  if(cam.available()) {
+    cam.read();
+    buffer[iWrite] = cam.get();
+    buffer2[iWrite2] = cam.get();
+    buffer3[iWrite3] = cam.get();
+   
+   if ((keyPressed == true) && (key == 'a')) {
+    if(buffer[iRead] != null){
+      image(buffer[iRead], 0, 0);
+      tint(255,150);
+     }
+    }
+   else if ((keyPressed == true) && (key == 's')) {
+    if(buffer2[iRead2] != null){
+      image(buffer2[iRead2], 0, 0);
+      tint(255,150);
+    }
+   }
+   else if ((keyPressed == true) && (key == 'd')) {
+    if(buffer3[iRead3] != null){
+      image(buffer3[iRead3], 0, 0);
+      tint(255,150);
+     }
+   }
+   
+   /*
+   if(buffer[iRead] != null){
+      image(buffer[iRead], 0, 0);
+      tint(255,100);
+     }
+   
+
+   if(buffer2[iRead2] != null){
+      image(buffer2[iRead2], 0, 0);
+      tint(255,100);
+    }
+ */
+    else if ((keyPressed == true) && (key == 'f')) {
+      image(cam, 0, 0);
+      tint(255,150);
+     }
+    
+    if (keyPressed == false){
+     image(cam, 0, 0);
+     tint(255,255);
+    }
+    
+    
+    iWrite++;
+    iRead++;
+    iWrite2++;
+    iRead2++;
+    iWrite3++;
+    iRead3++;
+    
+    
+    if(iRead >= nFrames-1){
+      iRead = 0;
+    }
+    if(iWrite >= nFrames-1){
+      iWrite = 0;
+    }
+    if(iRead2 >= nFrames2-1){
+      iRead2 = 0;
+    }
+    if(iWrite2 >= nFrames2-1){
+      iWrite2 = 0;
+    }
+    if(iRead3 >= nFrames3-1){
+      iRead3 = 0;
+    }
+    if(iWrite3 >= nFrames3-1){
+      iWrite3 = 0;
+    }
+    
+   }
+  }       
